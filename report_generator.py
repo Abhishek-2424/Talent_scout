@@ -13,23 +13,49 @@ class PDF(FPDF):
         self.set_auto_page_break(auto=True, margin=15)
         self.set_margins(15, 15, 15)  # Left, Top, Right margins
         
-        # Try to add Arial font, fall back to default if not available
+        # Try to use Arial if available, otherwise use default font
         try:
-            self.add_font('Arial', '', 'c:/windows/fonts/arial.ttf', uni=True)
-            self.add_font('Arial', 'B', 'c:/windows/fonts/arialbd.ttf', uni=True)
-            self.add_font('Arial', 'I', 'c:/windows/fonts/ariali.ttf', uni=True)
-        except RuntimeError:
-            # Fall back to default font if Arial is not available
-            self.set_font('Arial', '', 12)  # This will use the default font
+            # Try common Windows paths first
+            font_paths = [
+                'c:/windows/fonts/arial.ttf',
+                'c:/winnt/fonts/arial.ttf',
+                '/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf',  # Common Linux path
+                '/usr/share/fonts/truetype/liberation/LiberationSans-Regular.ttf'  # Another common Linux font
+            ]
+            
+            # Try to find the first available font
+            for font_path in font_paths:
+                try:
+                    self.add_font('CustomFont', '', font_path, uni=True)
+                    # If we get here, font was added successfully
+                    self.set_font('CustomFont', '', 12)
+                    return
+                except (RuntimeError, OSError):
+                    continue
+            
+            # If we get here, no custom fonts were found - use default
+            self.set_font('Arial', '', 12)
+            
+        except Exception as e:
+            # Fall back to default font if any error occurs
+            self.set_font('Arial', '', 12)
     
     def header(self):
-        self.set_font('Arial', 'B', 15)
+        # Try to use bold font if available, otherwise use regular
+        try:
+            self.set_font('CustomFont', 'B', 15)
+        except:
+            self.set_font('Arial', 'B', 15)
         self.cell(0, 10, 'TalentScout AI - Interview Report', 0, 1, 'C')
         self.ln(5)
         
     def footer(self):
         self.set_y(-15)
-        self.set_font('Arial', 'I', 8)
+        # Try to use italic font if available, otherwise use regular
+        try:
+            self.set_font('CustomFont', 'I', 8)
+        except:
+            self.set_font('Arial', 'I', 8)
         self.cell(0, 10, f'Page {self.page_no()}', 0, 0, 'C')
         
     def safe_cell(self, w, h=0, txt='', border=0, ln=0, align='', fill=False, link=''):

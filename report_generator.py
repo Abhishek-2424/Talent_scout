@@ -95,7 +95,7 @@ def generate_pdf_report(session: InterviewSession, conversation_history: List[Di
     pdf.cell(0, 10, f"Phone: {candidate_info.get('phone', 'Not provided')}", 0, 1)
     pdf.cell(0, 10, f"Position: {candidate_info.get('position', 'Not specified')}", 0, 1)
     pdf.cell(0, 10, f"Experience: {candidate_info.get('years_of_experience', 0)} years", 0, 1)
-    pdf.cell(0, 10, f"Tech Stack: {', '.join(candidate_info.get('tech_stack', ['None specified']))}", 0, 1)
+    pdf.cell(0, 10, f"Tech Stack: {candidate_info.get('tech_stack', ['None specified'])}", 0, 1)
     
     # Add interview details
     pdf.ln(10)

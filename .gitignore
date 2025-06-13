@@ -20,20 +20,67 @@ wheels/
 .installed.cfg
 *.egg
 
-# Environment variables
-.env
-.venv
-env/
+# Virtual Environment
+.venv/
 venv/
 ENV/
-env.bak/
+env/
 venv.bak/
 
-# IDE specific files
+# Environment and sensitive data
+.env
+.env.*
+!.env.example
+secrets.yaml
+secrets.yml
+
+# Security configurations
+.encryption_key
+.encryption_key.*
+*.pem
+*.key
+*.crt
+*.cer
+*.p12
+*.pfx
+*.p7b
+
+# Application data
+data/*.json
+!data/.gitkeep
+audit.log
+
+# Logs and databases
+*.log
+logs/
+*.sqlite
+*.db
+
+# IDE and editor files
 .idea/
 .vscode/
 *.swp
 *.swo
+*~
+.DS_Store
+Thumbs.db
+
+# Testing
+.coverage
+htmlcov/
+.pytest_cache/
+.mypy_cache/
+
+# Local development overrides
+local_settings.py
+local_config.py
+override.ini
+
+# Build and distribution
+*.egg-info/
+build/
+dist/
+*.egg
 *~
 .DS_Store
 
